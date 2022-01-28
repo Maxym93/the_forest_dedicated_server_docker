@@ -205,7 +205,7 @@ then
     echo "--------------------------------------------------"
     echo "-----     Starting $CONTAINER_NAME container     ------"
     echo "--------------------------------------------------"
-    docker run -d --restart=always --cpu-shares 4096 \
+    docker run -d --restart=always \
         -v $THE_FOREST_DIR:/the_forest \
         -e FOREST_NAME="$FOREST_NAME" \
         -e FOREST_PLAYERS="$FOREST_PLAYERS" \
