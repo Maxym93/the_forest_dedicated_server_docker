@@ -8,7 +8,7 @@ serverGamePort 27015
 serverQueryPort 27016
 serverName $FOREST_NAME
 serverPlayers $FOREST_PLAYERS
-enableVAC off
+enableVAC $FOREST_VAC
 serverPassword $FOREST_SERVER_PASS
 serverPasswordAdmin $FOREST_ADMIN_PASS
 serverSteamAccount $FOREST_GAME_TOKEN
@@ -16,7 +16,7 @@ serverAutoSaveInterval $SAVE_INTERVAL
 difficulty $DIFFICULTY
 initType $INIT_TYPE
 slot $SAVE_SLOT
-showLogs off
+showLogs $FOREST_LOGS
 serverContact $ADMIN_EMAIL
 veganMode $VEGAN_MODE
 vegetarianMode $VEGATARIAN_MODE
@@ -24,7 +24,7 @@ resetHolesMode $FOREST_RESET_HOLES
 treeRegrowMode $FOREST_TREE_REGROW
 allowBuildingDestruction $FOREST_BUILDING_DESTR
 allowEnemiesCreativeMode $FOREST_CREATIVE_ENEMIES
-allowCheats off
+allowCheats $FOREST_ALLOW_CHEATS
 realisticPlayerDamage $TEAM_DAMEGE
 saveFolderPath 
 targetFpsIdle 5
