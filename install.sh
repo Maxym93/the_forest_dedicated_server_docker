@@ -10,6 +10,7 @@ QUERY_PORT="27016"                                      # Query Port to be opene
 ##############           START           #################################
 FOREST_NAME="The Forest PRIVATE SERVER"                 # Server display name
 FOREST_PLAYERS="8"                                      # Maximum number of players
+FOREST_VAC="off"                                        # Enable or Disable Valve AntiCheat (Better to not use it) (Default: off)
 FOREST_SERVER_PASS="SERVER_PASS"                        # Password to enter the server (leave blank "" to enter without password)
 FOREST_ADMIN_PASS="ADMIN_PASS"                          # Administrator password to manage players on server (leave blank "" to disable Admin on Server)
 FOREST_GAME_TOKEN="STEAM_TOKEN"                         # PUT your Steam TOKEN here
@@ -17,12 +18,14 @@ SAVE_INTERVAL="30"                                      # Interval of World Save
 DIFFICULTY="Normal"                                     # Difficulty ( Peaceful | Normal | Hard )(Default: Normal)
 INIT_TYPE="Continue"                                    # New or continue a game ( New | Continue ) (Default: Continue)
 SAVE_SLOT="1"                                           # Slot to save the game ( 1 | 2 | 3 | 4 | 5 )
+FOREST_LOGS="off"                                       # More output of server logs (Default: off)
 ADMIN_EMAIL="E-MAIL@gmail.com"                          # Admin contact E-Mail
 VEGAN_MODE="off"                                        # Set on if you want to disable enemies ( on | off ) (Default: off)
 VEGATARIAN_MODE="off"                                   # Set on if you want to enable enemies only at night ( on | off ) (Default: off)
 FOREST_RESET_HOLES="off"                                # Reset all existing floor holes when loading a save ( on | off ) (Default: off)
 FOREST_TREE_REGROW="on"                                 # Enable Tree regrowth when sleeping ( on | off ) (Default: on)
 FOREST_CREATIVE_ENEMIES="off"                           # Allow enemies in creative games ( on | off ) (Default: off)
+FOREST_ALLOW_CHEATS="off"                               # To allow use cheats on Server (Default: off)
 TEAM_DAMEGE="off"                                       # Realistic Player Damage ( on | off ) (Default: off)
 ##############           START           #################################
 ##############   PLEASE EDIT ONLY HERE   #################################
@@ -209,6 +212,7 @@ then
         -v $THE_FOREST_DIR:/the_forest \
         -e FOREST_NAME="$FOREST_NAME" \
         -e FOREST_PLAYERS="$FOREST_PLAYERS" \
+        -e FOREST_VAC="$FOREST_VAC" \
         -e FOREST_SERVER_PASS="$FOREST_SERVER_PASS" \
         -e FOREST_ADMIN_PASS="$FOREST_ADMIN_PASS" \
         -e FOREST_GAME_TOKEN="$FOREST_GAME_TOKEN" \
@@ -216,12 +220,14 @@ then
         -e DIFFICULTY="$DIFFICULTY" \
         -e INIT_TYPE="$INIT_TYPE" \
         -e SAVE_SLOT="$SAVE_SLOT" \
+        -e FOREST_LOGS="$FOREST_LOGS" \
         -e ADMIN_EMAIL="$ADMIN_EMAIL" \
         -e VEGAN_MODE="$VEGAN_MODE" \
         -e VEGATARIAN_MODE="$VEGATARIAN_MODE" \
         -e FOREST_RESET_HOLES="$FOREST_RESET_HOLES" \
         -e FOREST_TREE_REGROW="$FOREST_TREE_REGROW" \
         -e FOREST_CREATIVE_ENEMIES="$FOREST_CREATIVE_ENEMIES" \
+        -e FOREST_ALLOW_CHEATS="$FOREST_ALLOW_CHEATS" \
         -e TEAM_DAMEGE="$TEAM_DAME" \
         -p $STEAM_PORT:8766/tcp -p $STEAM_PORT:8766/udp \
         -p $GAME_PORT:27015/tcp -p $GAME_PORT:27015/udp \
