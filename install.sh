@@ -33,7 +33,7 @@ TEAM_DAMEGE="off"                                       # Realistic Player Damag
 CONTAINER_NAME="the_forest"                             # The name of Docker Container
 STEAMCMD_DIR="/srv/steamcmd"                            # SteamCMD Directory
 THE_FOREST_DIR="/srv/the_forest"                        # The Forest Dedicated Server Directory
-BACKUPS_DIR="/home/$USER_NAME/backups"                  # BackUPs Directory
+BACKUPS_DIR="/home/$USER_NAME/backups/the_forest"       # BackUPs Directory
 
 # Create BackUP DIR
 if [ ! -d $BACKUPS_DIR ]
@@ -41,7 +41,7 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 1 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "---     Creating $BACKUPS_DIR dir     ---"
+    echo "- Creating $BACKUPS_DIR dir  -"
     echo "--------------------------------------------------"
     mkdir -p $BACKUPS_DIR > /dev/null 2>&1
 else
@@ -87,15 +87,15 @@ else
 fi
 
 # Copy SAVES
-if ([ -f ./saves/guid ] && [ ! -f $THE_FOREST_DIR/saves/Multiplayer/Slot1/guid ])
+if ([ -f ./saves/guid ] && [ ! -f $THE_FOREST_DIR/saves/Multiplayer/Slot$SAVE_SLOT/guid ])
 then
     echo "--------------------------------------------------"
     echo "-------------     STEP 4 / 10       --------------"
     echo "---------------------------------------------------"
     echo "-------------     Copying Saves     ---------------"
     echo "---------------------------------------------------"
-    sudo mkdir -p $THE_FOREST_DIR/saves/Multiplayer/Slot1/ > /dev/null 2>&1
-    sudo cp ./saves/* $THE_FOREST_DIR/saves/Multiplayer/Slot1/ > /dev/null 2>&1
+    sudo mkdir -p $THE_FOREST_DIR/saves/Multiplayer/Slot$SAVE_SLOT/ > /dev/null 2>&1
+    sudo cp ./saves/* $THE_FOREST_DIR/saves/Multiplayer/Slot$SAVE_SLOT/ > /dev/null 2>&1
 else
     echo "--------------------------------------------------"
     echo "-------------     STEP 4 / 10       --------------"
@@ -123,8 +123,6 @@ else
     sudo ufw allow $GAME_PORT
     sudo ufw allow $QUERY_PORT
 fi
-
-
 
 # Install SteamCMD
 if [ ! -f $STEAMCMD_DIR/steamcmd.sh ]
@@ -187,7 +185,7 @@ then
     echo "----------     Creating CRONTAB JOB     ----------"
     echo "--------------------------------------------------"
     crontab -l > mycron
-    echo "0 5 * * * sudo zip -r $BACKUPS_DIR/\$(date +\%Y_\%m_\%d__\%H_\%M_\%S).zip $THE_FOREST_DIR/saves/ && docker stop $CONTAINER_NAME && sleep 60 && docker start $CONTAINER_NAME && sudo chown $USER_NAME:$USER_NAME $BACKUPS_DIR/*.zip" >> mycron
+    echo "0 5 * * * sudo zip -r $BACKUPS_DIR/\$(date +\%Y_\%m_\%d__\%H_\%M_\%S).zip $THE_FOREST_DIR/saves/ && docker stop $CONTAINER_NAME && sleep 60 && docker start $CONTAINER_NAME && sudo chown -R $USER_NAME:$USER_NAME $BACKUPS_DIR/" >> mycron
     crontab mycron
     rm mycron
     sudo service cron reload > /dev/null 2>&1
