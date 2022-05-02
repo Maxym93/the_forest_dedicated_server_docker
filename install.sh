@@ -27,7 +27,7 @@ FOREST_TREE_REGROW="on"                                 # Enable Tree regrowth w
 FOREST_CREATIVE_ENEMIES="off"                           # Allow enemies in creative games ( on | off ) (Default: off)
 FOREST_ALLOW_CHEATS="off"                               # To allow use cheats on Server (Default: off)
 TEAM_DAMEGE="off"                                       # Realistic Player Damage ( on | off ) (Default: off)
-##############           START           #################################
+##############            END            #################################
 ##############   PLEASE EDIT ONLY HERE   #################################
 
 CONTAINER_NAME="the_forest"                             # The name of Docker Container
@@ -41,14 +41,14 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 1 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "- Creating $BACKUPS_DIR dir  -"
+    echo "----------     Creating BackUP dir      ----------"
     echo "--------------------------------------------------"
     mkdir -p $BACKUPS_DIR > /dev/null 2>&1
 else
     echo "--------------------------------------------------"
     echo "-------------     STEP 1 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "-    $BACKUPS_DIR dir already exists    -"
+    echo "--------    BackUP dir already exists    ---------"
     echo "--------------------------------------------------"
 fi
 
@@ -58,14 +58,14 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 2 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "--     Creating SteamCMD dir $STEAMCMD_DIR     ---"
+    echo "---------     Creating SteamCMD dir      ---------"
     echo "--------------------------------------------------"
     sudo mkdir -p $STEAMCMD_DIR > /dev/null 2>&1
 else
     echo "--------------------------------------------------"
     echo "-------------     STEP 2 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "----     $STEAMCMD_DIR dir already exists     ----"
+    echo "------     SteamCMD dir already exists     -------"
     echo "--------------------------------------------------"
 fi
 
@@ -75,14 +75,14 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 3 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "-     Creating The Forest dir $THE_FOREST_DIR    -"
+    echo "---------     Creating The Forest dir     --------"
     echo "--------------------------------------------------"
     sudo mkdir -p $THE_FOREST_DIR > /dev/null 2>&1
 else
     echo "--------------------------------------------------"
     echo "-------------     STEP 3 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "--     $THE_FOREST_DIR dir already exists      ---"
+    echo "-----     The Forest dir already exists      -----"
     echo "--------------------------------------------------"
 fi
 
@@ -141,23 +141,14 @@ else
     echo "--------------------------------------------------"
 fi
 
-# Download The Forest Server
-if [ ! -f $THE_FOREST_DIR/TheForestDedicatedServer.exe ]
-then
-    echo "--------------------------------------------------"
-    echo "-------------     STEP 7 / 10       --------------"
-    echo "--------------------------------------------------"
-    echo "-----     Installing The Forest Server     -------"
-    echo "--------------------------------------------------"
-    sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y lib32gcc1
-    bash -c "sudo $STEAMCMD_DIR/steamcmd.sh +@sSteamCmdForcePlatformType windows +@ShutdownOnFailedCommand 0 +@NoPromptForPassword 1 +force_install_dir $THE_FOREST_DIR +login anonymous +app_update 556450 validate +quit"
-else
-    echo "--------------------------------------------------"
-    echo "-------------     STEP 7 / 10       --------------"
-    echo "--------------------------------------------------"
-    echo "--     The Forest Server already installed     ---"
-    echo "--------------------------------------------------"
-fi
+# Download/Update The Forest Server
+echo "--------------------------------------------------"
+echo "-------------     STEP 7 / 10       --------------"
+echo "--------------------------------------------------"
+echo "------     Updating The Forest Server     --------"
+echo "--------------------------------------------------"
+sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y lib32gcc1
+bash -c "sudo $STEAMCMD_DIR/steamcmd.sh +@sSteamCmdForcePlatformType windows +@ShutdownOnFailedCommand 0 +@NoPromptForPassword 1 +force_install_dir $THE_FOREST_DIR +login anonymous +app_update 556450 validate +quit"
 
 # Create docker image (tag the_forest:latest)
 if [[ $(docker images -a | grep -o $CONTAINER_NAME | head -1) != "$CONTAINER_NAME" ]]
@@ -165,14 +156,14 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 8 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "-------     Creating $CONTAINER_NAME image     --------"
+    echo "---------     Creating Docker image     ----------"
     echo "--------------------------------------------------"
     docker build -t $CONTAINER_NAME .
 else
     echo "--------------------------------------------------"
     echo "-------------     STEP 8 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "--------     $CONTAINER_NAME already exists     -------"
+    echo "--------    Docker image already exists    -------"
     echo "--------------------------------------------------"
 fi
 
@@ -193,10 +184,9 @@ else
     echo "--------------------------------------------------"
     echo "-------------     STEP 9 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "--------     $CONTAINER_NAME already exists     -------"
+    echo "-------     CRONTAB JOB already exists     -------"
     echo "--------------------------------------------------"
 fi
-
 
 # Start The Forest Server in Docker
 if [[ $(docker ps -a | grep -o $CONTAINER_NAME | head -1) != "$CONTAINER_NAME" ]]
@@ -204,7 +194,7 @@ then
     echo "--------------------------------------------------"
     echo "-------------     STEP 10 / 10       -------------"
     echo "--------------------------------------------------"
-    echo "-----     Starting $CONTAINER_NAME container     ------"
+    echo "-------     Starting Docker container     --------"
     echo "--------------------------------------------------"
     docker run -d --restart=always \
         -v $THE_FOREST_DIR:/the_forest \
@@ -226,7 +216,7 @@ then
         -e FOREST_TREE_REGROW="$FOREST_TREE_REGROW" \
         -e FOREST_CREATIVE_ENEMIES="$FOREST_CREATIVE_ENEMIES" \
         -e FOREST_ALLOW_CHEATS="$FOREST_ALLOW_CHEATS" \
-        -e TEAM_DAMEGE="$TEAM_DAME" \
+        -e TEAM_DAMEGE="$TEAM_DAMEGE" \
         -p $STEAM_PORT:8766/tcp -p $STEAM_PORT:8766/udp \
         -p $GAME_PORT:27015/tcp -p $GAME_PORT:27015/udp \
         -p $QUERY_PORT:27016/tcp -p $QUERY_PORT:27016/udp \
@@ -235,6 +225,6 @@ else
     echo "--------------------------------------------------"
     echo "------------     STEP 10 / 10       --------------"
     echo "--------------------------------------------------"
-    echo "--   Container $CONTAINER_NAME is already running    --"
+    echo "----   Docker container is already running    ----"
     echo "--------------------------------------------------"
 fi

@@ -29,9 +29,11 @@ COPY ./start_server.sh /
 
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
-    apt-get install -y --no-install-recommends --no-install-suggests wget wine-stable lib32gcc1 net-tools winbind xvfb && \
-	mkdir -p $THE_FOREST_DIR && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    chmod +x /start_server.sh
+    apt-get install -y --no-install-recommends --no-install-suggests wget wine-stable lib32gcc1 net-tools winbind xvfb tzdata && \
+    mkdir -p $THE_FOREST_DIR && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    chmod +x /start_server.sh && \
+    ln -fs /usr/share/zoneinfo/Europe/Kiev /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 CMD ["./start_server.sh"]
